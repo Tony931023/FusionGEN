@@ -62,6 +62,7 @@
 			{if hasPermission('view', "vote")}<a href="{$url}vote" class="list-group-item list-group-item-action  {if $link_active == 'vote'}active{/if}">{lang("vote", "main")}</a>{/if}
 			{if hasPermission('view', "donate")}<a href="{$url}donate" class="list-group-item list-group-item-action  {if $link_active == 'donate'}active{/if}">{lang("donate", "main")}</a>{/if}
 			{if hasPermission('view', "store")}<a href="{$url}store" class="list-group-item list-group-item-action  {if $link_active == 'store'}active{/if}">{lang("store", "main")}</a>{/if}
+			{if hasPermission('view', "tokenpd")}<a href="{$url}tokenpd" class="list-group-item list-group-item-action  {if $link_active == 'tokenpd'}active{/if}">Token de Regalo (PD)</a>{/if}
 		</div>
 		
 		<div class="list-group mt-3">
