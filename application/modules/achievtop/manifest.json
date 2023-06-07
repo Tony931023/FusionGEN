@@ -1,0 +1,10 @@
+{
+	"name":"Achievtop",
+	"description":"Ranking de logros en el reino.",
+	"author":
+	{
+		"name":"Aman'Thul",
+		"website":"https:\/\/www.amanthul.nat.cu/"
+	},
+	"enabled":true
+}
