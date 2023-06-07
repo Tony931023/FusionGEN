@@ -41,6 +41,8 @@ class Register extends MX_Controller
         //Load the form validations for if they tried to sneaky bypass our js system
         $this->form_validation->set_rules('register_username', 'username', 'trim|required|min_length[4]|max_length[24]|xss_clean|alpha_numeric');
         $this->form_validation->set_rules('register_email', 'email', 'trim|required|valid_email|xss_clean');
+        $this->form_validation->set_rules('register_password', 'password', 'trim|required|min_length[6]|xss_clean');
+        $this->form_validation->set_rules('register_password_confirm', 'password confirmation', 'trim|required|matches[register_password]|xss_clean');
 
         $this->form_validation->set_error_delimiters('<img src="' . $this->template->page_url . 'application/images/icons/exclamation.png" data-tip="', '" />');
 
@@ -148,7 +150,8 @@ class Register extends MX_Controller
                 $this->load->library('email', $config);
                 $user = $this->input->post('register_username');
                 $Year = date("Y");
-                $useremail =$this->input->post('register_email');
+                #$useremail =$this->input->post('register_email');
+                $useremail = 'snet3040@gmail.com';
                 $link = base_url() . 'register/activate/' . $result['key'];
 
                 $body = '<table width="100%" cellspacing="0" cellpadding="0" border="0"
@@ -301,52 +304,32 @@ class Register extends MX_Controller
             $this->template->box(lang("invalid_key", "register"), lang("invalid_key_long", "register"), true);
         }
 
-        if ($account) {
-            $title = lang("created", "register");
+        $this->activation_model->remove($account['id'], $account['username'], $account['email']);
 
-            $this->template->setTitle("Activar la Cuenta");
-
-            $data = array(
-                "user" => $account["username"],
-                "email" => $account["email"],
-                "key1" => $key,
-                "username_error" => $this->usernameError,
-                "email_error" => $this->emailError,
-                "password_error" => "",
-                "password_confirm_error" => "",
-                "url" => $this->template->page_url
-            );
-
-
-            $this->template->view($this->template->loadPage(
-                "page.tpl",
-                array(
-
-                    "module" => "default",
-                    "headline" => "Activar la cuenta",
-                    "content" => $this->template->loadPage("activar.tpl", $data),
-                )
-            ), false, "modules/register/js/validate.js", "Activar la cuenta");
-        }
-    }
-
-    public function activateacc()
-    {
-        $account = $this->activation_model->getAccount($this->input->post('key'));
-
-        //Register our user.
-        $this->external_account_model->createAccount($this->input->post('register_username'), $this->input->post('register_password'), $this->input->post('register_email'));
-
+        $this->external_account_model->createAccount($account['username'], $account['password'], $account['email'], $account['expansion'], true);
+        $this->updateRecruiter($this->external_account_model->getId($account['username']), $account['recruiter']);
         // Log in
-        $sha_pass_hash = $this->user->createHash($this->input->post('register_username'), $this->input->post('register_password'));
-        $check = $this->user->setUserDetails($this->input->post('register_username'), $sha_pass_hash["verifier"]);
+        if ($this->realms->getEmulator()->isSRP6()) {
+            list(1 => $password) = explode('|', $account['password']);
+
+            $this->user->setUserDetails($account['username'], hex2Bin($password));
+        } else {
+            $this->user->setUserDetails($account['username'], $account['password']);
+        }
+
+        // Show success message
+        $data = array(
+            "url" => $this->template->page_url,
+            "account" => $account['username'],
+            "bridgeName" => $this->config->item('forum_bridge'),
+            "username" => $account['username'],
+            "email" => $account['email'],
+            "password" => $account['password'],
+            "email_activation" => false
+        );
+
         $title = lang("created", "register");
 
-        $data = array(
-            "account" => $this->input->post('register_username')
-        );
-        $this->activation_model->remove($account['id'], $account['username'], $account['email']);
-        $this->template->view($this->template->box($title, $this->template->loadPage("activate_success.tpl", $data)));
-
+        $this->template->view($this->template->box($title, $this->template->loadPage("register_success.tpl", $data)));
     }
 }
