@@ -10,8 +10,8 @@
 
 		<link rel="stylesheet" href="{$url}application/themes/admin/assets/vendor/bootstrap/css/bootstrap.css" />
 		<link rel="stylesheet" href="{$url}application/themes/admin/assets/vendor/animate/animate.compat.css">
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<link rel="stylesheet" href="https://cdn.amanthul.cu/web/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+		<link href="https://cdn.amanthul.cu/web/font/material.css" rel="stylesheet">
 		<link rel="stylesheet" href="{$url}application/themes/admin/assets/vendor/magnific-popup/magnific-popup.css" />
 		<link rel="stylesheet" href="{$url}application/themes/admin/assets/vendor/bootstrap-datepicker/css/bootstrap-datepicker3.css" />
 		<link rel="stylesheet" href="{$url}application/themes/admin/assets/vendor/owl.carousel/assets/owl.carousel.css" />
@@ -23,7 +23,7 @@
 		<link rel="stylesheet" href="{$url}application/themes/admin/assets/vendor/sweetalert2/css/sweetalert2-dark.css">
 		<link rel="stylesheet" href="{$url}application/themes/admin/assets/vendor/select2/css/select2.css">
 		<link rel="stylesheet" href="{$url}application/themes/admin/assets/vendor/select2-bootstrap-theme/select2-bootstrap.min.css">
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.css">
+		<link rel="stylesheet" href="https://cdn.amanthul.cu/web/css/switchery.min.css">
 		<link rel="stylesheet" href="{$url}application/themes/admin/assets/vendor/datatables/media/css/dataTables.bootstrap5.min.css">
 		<link rel="stylesheet" href="{$url}application/themes/admin/assets/vendor/codemirror/lib/codemirror.css">
 		<link rel="stylesheet" href="{$url}application/themes/admin/assets/vendor/codemirror/theme/ayu-mirage.css">
@@ -61,7 +61,7 @@
 		<script src="{$url}application/themes/admin/assets/vendor/owl.carousel/owl.carousel.js"></script>
 		<script src="{$url}application/themes/admin/assets/vendor/sweetalert2/js/sweetalert2.js"></script>
 		<script src="{$url}application/themes/admin/assets/vendor/select2/js/select2.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.js"></script>
+		<script src="https://cdn.amanthul.cu/web/js/switchery.min.js"></script>
 		<script src="{$url}application/themes/admin/assets/vendor/datatables/media/js/jquery.dataTables.min.js"></script>
 		<script src="{$url}application/themes/admin/assets/vendor/datatables/media/js/dataTables.bootstrap5.min.js"></script>
 		<script src="{$url}application/themes/admin/assets/vendor/fuelux/js/spinner.js"></script>
