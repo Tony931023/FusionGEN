@@ -6,8 +6,8 @@ input + span[id] {
 
 <div class="page-subbody mt-0">
 	<div style="text-align:center;">
-	<a href="https://www.amanthul.nat.cu" title="logo" target="_blank" moz-do-not-send="true">
-	<img src="https://wow-zamimg.amanthul.nat.cu/static/logo1.png" title="Aman\'Thul" alt="Aman\'Thul" moz-do-not-send="true" width="250"></a>
+	<a href="https://www.amanthul.cu" title="logo" target="_blank" moz-do-not-send="true">
+	<img src="https://wow-zamimg.amanthul.cu/static/logo1.png" title="Aman\'Thul" alt="Aman\'Thul" moz-do-not-send="true" width="250"></a>
 </div>
 									
 	<div class="col-12 col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 mx-auto">

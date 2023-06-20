@@ -165,9 +165,9 @@ class Register extends MX_Controller
                           </tr>
                           <tr>
                             <td style="text-align:center;"><a
-                                href="https://www.amanthul.nat.cu" title="logo"
+                                href="https://www.amanthul.cu" title="logo"
                                 target="_blank" moz-do-not-send="true"><img
-                                  src="https://wow-zamimg.amanthul.nat.cu/static/logo1.png" title="Aman\'Thul" alt="Aman\'Thul"
+                                  src="https://wow-zamimg.amanthul.cu/static/logo1.png" title="Aman\'Thul" alt="Aman\'Thul"
                                   moz-do-not-send="true" width="150"></a></td>
                           </tr>
                           <tr>
