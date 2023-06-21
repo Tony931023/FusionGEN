@@ -55,9 +55,9 @@ class Item extends MX_Controller
             $cache2 = $this->cache->get("items/display_iconname_" . $id);
 
             if ($cache2 != false) {
-                return "<div class='item'><a></a><img src='https://wow-zamimg.amanthul.nat.cu/static/images/icons/large/" . $cache2 . ".jpg' /></div>";
+                return "<div class='item'><a></a><img src='https://wow-zamimg.amanthul.cu/static/icons/retail/large/" . $cache2 . ".jpg' /></div>";
             } else {
-                return "<div class='item'><a></a><img src='https://wow-zamimg.amanthul.nat.cu/static/images/icons/large/inv_misc_questionmark.jpg' /></div>";
+                return "<div class='item'><a></a><img src='https://wow-zamimg.amanthul.cu/static/icons/retail/large/inv_misc_questionmark.jpg' /></div>";
             }
         } else {
             return $this->template->loadPage("icon_ajax.tpl", array('id' => $id, 'realm' => $this->realm, 'url' => $this->template->page_url));

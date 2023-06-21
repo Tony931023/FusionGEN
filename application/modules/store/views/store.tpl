@@ -31,9 +31,9 @@
 			<div id="store_wrapper">
 				<div id="store">
 					<form onSubmit="return false">
-					<div class="row align-self-center mb-3">
-							<label class="col-sm-1 align-self-center sort" for="sort_by">{lang("sort_by", "store")}</label>
-							<div class="col-sm-2">
+					<div class="row align-self-center mb-5">
+							
+							<div class="col-sm-6">
 							<select id="sort_by" name="sort_by" onChange="Store.Filter.sort(this.value)">
 								<option value="standard" selected>{lang("default", "store")}</option>
 								<option value="name">{lang("name", "store")}</option>
@@ -43,7 +43,7 @@
 							</select>
 							</div>
 						
-						<div class="col-sm-3">
+						<div class="col-sm-6">
 							<select id="item_quality" name="item_quality" onChange="Store.Filter.setQuality(this.value)">
 								<option value="ALL" selected>{lang("all_items", "store")}</option>
 								<option value="0" class="q0">{lang("poor", "store")}</option>
@@ -56,18 +56,8 @@
 								<option value="7" class="q7">{lang("heirloom", "store")}</option>
 							</select>
 						</div>
-						<div class="col-sm-3">
-							<input class="form-control" type="text" id="filter_name" placeholder="{lang("filter", "store")}" onKeyUp="Store.Filter.setName(this.value)">
-						</div>
-						<div class="col-sm-3">
-							<a href="javascript:void(0)" onClick="Store.Filter.toggleVote(this)" class="nice_button">
-								<img src="{$url}application/images/icons/lightning.png" align="absmiddle"> {lang("vp", "store")}
-							</a>
-
-							<a href="javascript:void(0)" onClick="Store.Filter.toggleDonate(this)" class="nice_button">
-								<img src="{$url}application/images/icons/coins.png" align="absmiddle"> {lang("dp", "store")}
-							</a>
-						</div>
+						
+						
 						</div>
 
 					</form>
@@ -101,7 +91,7 @@
 															{foreach from=$group.items item=item}
 															<div class="store_item row p-2 border rounded mb-2" id="item_{$item.id}">
 																<div class="col-md-1 mt-1">
-																	<img class="item_icon img-responsive rounded" src="https://icons.wowdb.com/retail/medium/{$item.icon}.jpg" align="absmiddle" {if $item.tooltip}data-realm="{$item.realm}" rel="item={$item.itemid}"{/if}>
+																	<img class="item_icon img-responsive rounded" src="https://wow-zamimg.amanthul.cu/static/images/icons/medium/{$item.icon}.jpg" align="absmiddle" {if $item.tooltip}data-realm="{$item.realm}" rel="item={$item.itemid}"{/if}>
 																</div>
 																<div class="col-md-8 mt-1">
 																	<a {if $item.tooltip}href="{$url}item/{$item.realm}/{$item.itemid}" data-realm="{$item.realm}" rel="item={$item.itemid}"{/if} class="item_name q{$item.quality} align-self-center">
@@ -150,7 +140,7 @@
 													{/if}
 											</div>
 					
-											<img class="item_icon" src="https://icons.wowdb.com/retail/medium/{$item.icon}.jpg" align="absmiddle" {if $item.tooltip}data-realm="{$item.realm}" rel="item={$item.itemid}"{/if}>
+											<img class="item_icon" src="https://wow-zamimg.amanthul.cu/static/images/icons/medium/{$item.icon}.jpg" align="absmiddle" {if $item.tooltip}data-realm="{$item.realm}" rel="item={$item.itemid}"{/if}>
 											<a {if $item.tooltip}href="{$url}item/{$item.realm}/{$item.itemid}" data-realm="{$item.realm}" rel="item={$item.itemid}"{/if} class="item_name q{$item.quality}">
 												{character_limiter($item.name, 20)}
 											</a>
@@ -193,6 +183,25 @@
 					</div>
 				</div>
 			</div>
+			<br>
+			<form onSubmit="return false">
+					<div class="row align-self-center mb-5">		
+					
+			<div class="col-sm-6">
+							<input class="form-control" type="text" id="filter_name" placeholder="{lang("filter", "store")}" onKeyUp="Store.Filter.setName(this.value)">
+						</div>
+						<div class="col-sm-5">
+							<a href="javascript:void(0)" onClick="Store.Filter.toggleVote(this)" class="nice_button">
+								<img src="{$url}application/images/icons/lightning.png" align="absmiddle"> {lang("vp", "store")}
+							</a>
+
+							<a href="javascript:void(0)" onClick="Store.Filter.toggleDonate(this)" class="nice_button">
+								<img src="{$url}application/images/icons/coins.png" align="absmiddle"> {lang("dp", "store")}
+							</a>
+						</div>
+						</div>
+
+					</form>
 			</div>
 		</div>
 	</div>

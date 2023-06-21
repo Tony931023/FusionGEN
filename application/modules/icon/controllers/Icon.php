@@ -101,7 +101,7 @@ class Icon extends MX_Controller
     private function get_icon_wowhead($item)
     {
         // Get the item XML data
-        $xml = file_get_contents("https://www.wowhead.com/item=" . $item . "&xml");
+        $xml = file_get_contents("http://wow-zamimg.amanthul.cu/xml/" . $item . "&xml");
 
         $itemData = $this->xmlToArray($xml);
 

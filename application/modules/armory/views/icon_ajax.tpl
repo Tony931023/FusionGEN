@@ -9,7 +9,7 @@
 	 	{
 	 		$(".get_icon_" + {$id}).each(function()
 	 		{
-	 			$(this).html("<img src='https://icons.wowdb.com/retail/small/" + data + ".jpg' align='absmiddle'/>");
+	 			$(this).html("<img src='https://wow-zamimg.amanthul.cu/static/icons/retail/small/" + data + ".jpg' align='absmiddle'/>");
 	 		});
 	 	});
 	});

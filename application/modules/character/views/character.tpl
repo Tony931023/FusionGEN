@@ -208,6 +208,6 @@
 
 <!-- Load wowhead tooltip -->
 {if !$fcms_tooltip}
-<script type="text/javascript" src="https://static.wowhead.com/widgets/power.js"></script>
+<script type="text/javascript" src="https://wow-zamimg.amanthul.cu/static/js/power.js"></script>
 <script>var wowhead_tooltips = { "colorlinks": false, "iconizelinks": false, "renamelinks": false }</script>
 {/if}

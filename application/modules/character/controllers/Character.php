@@ -66,9 +66,9 @@ class Character extends MX_Controller
                 $cache2 = $this->cache->get("items/display_" . $cache['displayid']);
 
                 if ($cache2 != false) {
-                    return "<a href='" . $this->template->page_url . "item/" . $this->realm . "/" . $id . "' rel='item=" . $id . "' data-realm='" . $this->realm . "'></a><img src='https://icons.wowdb.com/retail/large/" . $cache2 . ".jpg' />";
+                    return "<a href='" . $this->template->page_url . "item/" . $this->realm . "/" . $id . "' rel='item=" . $id . "' data-realm='" . $this->realm . "'></a><img src='https://wow-zamimg.amanthul.cu/static/icons/retail/large/" . $cache2 . ".jpg' />";
                 } else {
-                    return "<a href='" . $this->template->page_url . "item/" . $this->realm . "/" . $id . "' rel='item=" . $id . "' data-realm='" . $this->realm . "'></a><img src='https://icons.wowdb.com/retail/large/inv_misc_questionmark.jpg' />";
+                    return "<a href='" . $this->template->page_url . "item/" . $this->realm . "/" . $id . "' rel='item=" . $id . "' data-realm='" . $this->realm . "'></a><img src='https://wow-zamimg.amanthul.cu/static/icons/retail/large/inv_misc_questionmark.jpg' />";
                 }
             } else {
                 $this->canCache = false;
