@@ -40,7 +40,7 @@
                         	<td width="10%" align="center">{$character.rank}</td>
                             <td width="60%">
                                 <img width="18px" height="18px" alt="*"
-                                    src="https://wow-zamimg.amanthul.nat.cu/static/images/icons/large/{$character.achiicon}.jpg" />
+                                    src="https://wow-zamimg.amanthul.cu/static/images/icons/large/{$character.achiicon}.jpg" />
                                 {$character.achiname}
                             </td>
                             <td width="30%"><a data-tip="Ver perfil del personaje" href="{$url}character/{$selected_realm}/{$character.guid}">{$character.name}</a></td>
