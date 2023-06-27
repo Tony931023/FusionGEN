@@ -1,0 +1,38 @@
+.cursor-pointer {
+	cursor:pointer;
+}
+
+.card:not(.card-disabled).card-hover {
+	-webkit-transition: all 0.4s ;
+	transition: all 0.4s ;
+}
+
+.card:not(.card-disabled).card-hover:hover {
+	background-color:rgba(22,29,36,0.9);
+}
+
+.card.card-disabled {
+	cursor:default;
+	opacity:.5;
+}
+
+.btn-primary.disabled, .btn-primary:disabled {
+	background-color: #232d53;
+    border-color: #232d53;
+}
+
+.card {
+	background-color: #0f151c;
+}
+.icon-container {
+	animation: rotate 4s infinite linear;
+  }
+  
+  @keyframes rotate {
+	0% {
+	  transform: rotate(0deg);
+	}
+	100% {
+	  transform: rotate(360deg);
+	}
+  }

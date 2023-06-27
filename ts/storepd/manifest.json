@@ -1,0 +1,81 @@
+{
+	"name":"Storeod",
+	"description":"Storepd",
+	"author":
+	{
+		"name":"tony931023",
+		"website":"https:\/\/www.amanthul.cu"
+	},
+	"permissions":
+	{
+		"view":
+		{
+			"default":true,
+			"description":"View the StorePD screen."
+		},
+		"canAdd":
+		{
+			"default":false,
+			"description":"Add StorePD locations."
+		},
+		"canRemove":
+		{
+			"default":false,
+			"description":"Remove StorePD locations."
+		},
+		"canEdit":
+		{
+			"default":false,
+			"description":"Edit StorePD locations."
+		},
+		"canViewAdmin":
+		{
+			"default":false,
+			"description":"View the StorePD locations admin page."
+		}
+	},
+	"roles":
+	{
+		"view":
+		{
+			"description":"View the StorePD module.",
+			"permissions":
+			{
+				"view":true
+			}
+		},
+		"manage":
+		{
+			"description":"Manage StorePD. <font style='color:red;'>Admin-tool<\/font>",
+			"dangerLevel":2,
+			"permissions":
+			{
+				"canViewAdmin":true,
+				"canAdd":true,
+				"canRemove":true,
+				"canEdit":true
+			}
+		}
+	},
+	"admin":
+	[
+		
+		{
+			"text":"Store",
+			"icon":"share",
+			"links":
+			[
+				
+				{
+					"text":"Token PD",
+					"icon":"mouse-pointer",
+					"controller":"admin",
+					"requirePermission":"canViewAdmin"
+				}
+			]
+			
+		}
+	]
+	,
+	"enabled":true
+}
