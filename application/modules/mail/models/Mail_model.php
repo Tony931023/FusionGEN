@@ -82,7 +82,7 @@ class Mail_model extends CI_Model
     public function vcemail()
     {
         // Si deseas agregar una cláusula WHERE:
-        $id_usuario = 1;
+        $id_usuario = $this->user->getId();
         // Realizar la consulta utilizando el Query Builder de CodeIgniter
         $this->connection->select('email');
         $this->connection->from('account');
