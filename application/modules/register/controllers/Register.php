@@ -2,156 +2,156 @@
 
 class Register extends MX_Controller
 {
-    private $usernameError;
-    private $emailError;
+  private $usernameError;
+  private $emailError;
 
-    public function __construct()
-    {
-        parent::__construct();
+  public function __construct()
+  {
+    parent::__construct();
 
-        // Make sure that we are not logged in yet
-        $this->user->guestArea();
+    // Make sure that we are not logged in yet
+    $this->user->guestArea();
 
-        requirePermission("view");
+    requirePermission("view");
 
-        $this->load->helper(array('form', 'url', 'security'));
-        $this->load->library('form_validation');
+    $this->load->helper(array('form', 'url', 'security'));
+    $this->load->library('form_validation');
 
-        $this->load->helper('email_helper');
+    $this->load->helper('email_helper');
 
-        $this->load->config('bridge');
-        $this->load->config('activation');
-        $this->load->config('captcha');
+    $this->load->config('bridge');
+    $this->load->config('activation');
+    $this->load->config('captcha');
 
-        $this->load->model('activation_model');
+    $this->load->model('activation_model');
+  }
+
+  public function index()
+  {
+    clientLang("username_limit_length", "register");
+    clientLang("username_limit", "register");
+    clientLang("username_not_available", "register");
+    clientLang("email_not_available", "register");
+    clientLang("email_invalid", "register");
+    clientLang("password_short", "register");
+    clientLang("password_match", "register");
+
+    $this->template->setTitle(lang("register", "register"));
+
+    //Load the form validations for if they tried to sneaky bypass our js system
+    $this->form_validation->set_rules('register_username', 'username', 'trim|required|min_length[4]|max_length[24]|xss_clean|alpha_numeric');
+    $this->form_validation->set_rules('register_email', 'email', 'trim|required|valid_email|xss_clean');
+
+    $this->form_validation->set_error_delimiters('<img src="' . $this->template->page_url . 'application/images/icons/exclamation.png" data-tip="', '" />');
+
+    require_once('application/libraries/Captcha.php');
+
+    $captchaObj = new Captcha($this->config->item('use_captcha'));
+
+    if (count($_POST)) {
+      $emailAvailable = $this->email_check($this->input->post('register_email'));
+      $usernameAvailable = $this->username_check($this->input->post('register_username'));
+    } else {
+      $emailAvailable = false;
+      $usernameAvailable = false;
     }
 
-    public function index()
-    {
-        clientLang("username_limit_length", "register");
-        clientLang("username_limit", "register");
-        clientLang("username_not_available", "register");
-        clientLang("email_not_available", "register");
-        clientLang("email_invalid", "register");
-        clientLang("password_short", "register");
-        clientLang("password_match", "register");
+    //Check if everything went correct
+    if (
+      $this->form_validation->run() == false
+      || strtoupper($this->input->post('register_captcha')) != strtoupper($captchaObj->getValue())
+      || !count($_POST)
+      || !$usernameAvailable
+      || !$emailAvailable
+    ) {
+      $fields = array('username', 'email', 'password', 'password_confirm');
 
-        $this->template->setTitle(lang("register", "register"));
+      $data = array(
+        "username_error" => $this->usernameError,
+        "email_error" => $this->emailError,
+        "password_error" => "",
+        "password_confirm_error" => "",
+        "use_captcha" => $this->config->item('use_captcha'),
+        "captcha_type" => $this->config->item('captcha_type'),
+        "captcha_error" => "",
+        "url" => $this->template->page_url
+      );
 
-        //Load the form validations for if they tried to sneaky bypass our js system
-        $this->form_validation->set_rules('register_username', 'username', 'trim|required|min_length[4]|max_length[24]|xss_clean|alpha_numeric');
-        $this->form_validation->set_rules('register_email', 'email', 'trim|required|valid_email|xss_clean');
-
-        $this->form_validation->set_error_delimiters('<img src="' . $this->template->page_url . 'application/images/icons/exclamation.png" data-tip="', '" />');
-
-        require_once('application/libraries/Captcha.php');
-
-        $captchaObj = new Captcha($this->config->item('use_captcha'));
-
-        if (count($_POST)) {
-            $emailAvailable = $this->email_check($this->input->post('register_email'));
-            $usernameAvailable = $this->username_check($this->input->post('register_username'));
-        } else {
-            $emailAvailable = false;
-            $usernameAvailable = false;
+      if (count($_POST) > 0) {
+        // Loop through fields and assign error or success image
+        foreach ($fields as $field) {
+          if (strlen(form_error('register_' . $field)) == 0 && empty($data[$field . "_error"])) {
+            $data[$field . "_error"] = '<img src="' . $this->template->page_url . 'application/images/icons/accept.png" />';
+          } elseif (empty($data[$field . "_error"])) {
+            $data[$field . "_error"] = form_error('register_' . $field);
+          }
         }
 
-        //Check if everything went correct
-        if (
-            $this->form_validation->run() == false
-            || strtoupper($this->input->post('register_captcha')) != strtoupper($captchaObj->getValue())
-            || !count($_POST)
-            || !$usernameAvailable
-            || !$emailAvailable
-        ) {
-            $fields = array('username', 'email', 'password', 'password_confirm');
+        if ($this->input->post('register_captcha') != $captchaObj->getValue()) {
+          $data['captcha_error'] = '<img src="' . $this->template->page_url . 'application/images/icons/exclamation.png" />';
+        }
+      }
 
-            $data = array(
-                "username_error" => $this->usernameError,
-                "email_error" => $this->emailError,
-                "password_error" => "",
-                "password_confirm_error" => "",
-                "use_captcha" => $this->config->item('use_captcha'),
-                "captcha_type" => $this->config->item('captcha_type'),
-                "captcha_error" => "",
-                "url" => $this->template->page_url
-            );
+      // If not then display our page again
+      $this->template->view($this->template->loadPage(
+        "page.tpl",
+        array(
+          "module" => "default",
+          "headline" => "Creación de cuenta",
+          "content" => $this->template->loadPage("register.tpl", $data),
+        )
+      ), false, "modules/register/js/validate.js", "Creación de cuenta");
+    } else {
 
-            if (count($_POST) > 0) {
-                // Loop through fields and assign error or success image
-                foreach ($fields as $field) {
-                    if (strlen(form_error('register_' . $field)) == 0 && empty($data[$field . "_error"])) {
-                        $data[$field . "_error"] = '<img src="' . $this->template->page_url . 'application/images/icons/accept.png" />';
-                    } elseif (empty($data[$field . "_error"])) {
-                        $data[$field . "_error"] = form_error('register_' . $field);
-                    }
-                }
+      if (!$this->username_check($this->input->post("register_username"))) {
+        die();
+      }
 
-                if ($this->input->post('register_captcha') != $captchaObj->getValue()) {
-                    $data['captcha_error'] = '<img src="' . $this->template->page_url . 'application/images/icons/exclamation.png" />';
-                }
-            }
+      // Show success message
+      $data = array(
+        "url" => $this->template->page_url,
+        "account" => $this->input->post('register_username'),
+        "username" => $this->input->post('register_username'),
+        "email" => $this->input->post('register_email'),
+        "password" => $this->input->post('register_password'),
+        "email_activation" => $this->config->item('enable_email_activation')
+      );
 
-            // If not then display our page again
-            $this->template->view($this->template->loadPage(
-                "page.tpl",
-                array(
-                    "module" => "default",
-                    "headline" => "Creación de cuenta",
-                    "content" => $this->template->loadPage("register.tpl", $data),
-                )
-            ), false, "modules/register/js/validate.js", "Creación de cuenta");
-        } else {
+      if ($this->config->item('enable_email_activation')) {
+        $result = $this->activation_model->createAccountveremail($this->input->post('register_username'), $this->input->post('register_password'), $this->input->post('register_email'), $this->input->post('register_expansion'));
 
-            if (!$this->username_check($this->input->post("register_username"))) {
-                die();
-            }
+        $username = $result['username'];
+        $email = $result['email'];
 
-            // Show success message
-            $data = array(
-                "url" => $this->template->page_url,
-                "account" => $this->input->post('register_username'),
-                "username" => $this->input->post('register_username'),
-                "email" => $this->input->post('register_email'),
-                "password" => $this->input->post('register_password'),
-                "email_activation" => $this->config->item('enable_email_activation')
-            );
+        $this->load->config('smtp');
 
-            if ($this->config->item('enable_email_activation')) {
-                $result = $this->activation_model->createAccountveremail($this->input->post('register_username'), $this->input->post('register_password'), $this->input->post('register_email'), $this->input->post('register_expansion'));
+        // Pass the custom SMTP settings if any
+        if ($this->config->item('smtp_protocol') == 'smtp') {
+          $config = array(
+            'protocol' => $this->config->item('smtp_protocol'),
+            'smtp_host' => $this->config->item('smtp_host'),
+            'smtp_user' => $this->config->item('smtp_user'),
+            'smtp_pass' => $this->config->item('smtp_pass'),
+            'smtp_port' => $this->config->item('smtp_port'),
+            'smtp_crypto' => $this->config->item('smtp_crypto'),
+            'crlf' => "\r\n",
+            'newline' => "\r\n",
+          );
+        }
 
-                $username = $result['username'];
-                $email = $result['email'];
+        // Configuration
+        $config['charset'] = 'utf-8';
+        $config['wordwrap'] = true;
+        $config['mailtype'] = 'html';
 
-                $this->load->config('smtp');
+        $sender = $this->config->item('smtp_sender');
+        $this->load->library('email', $config);
+        $user = $this->input->post('register_username');
+        $Year = date("Y");
+        $useremail = $this->input->post('register_email');
+        $link = base_url() . 'register/activate/' . $result['key'];
 
-                // Pass the custom SMTP settings if any
-                if ($this->config->item('smtp_protocol') == 'smtp') {
-                    $config = array(
-                        'protocol' => $this->config->item('smtp_protocol'),
-                        'smtp_host' => $this->config->item('smtp_host'),
-                        'smtp_user' => $this->config->item('smtp_user'),
-                        'smtp_pass' => $this->config->item('smtp_pass'),
-                        'smtp_port' => $this->config->item('smtp_port'),
-                        'smtp_crypto' => $this->config->item('smtp_crypto'),
-                        'crlf' => "\r\n",
-                        'newline' => "\r\n",
-                    );
-                }
-
-                // Configuration
-                $config['charset'] = 'utf-8';
-                $config['wordwrap'] = true;
-                $config['mailtype'] = 'html';
-
-                $sender = $this->config->item('smtp_sender');
-                $this->load->library('email', $config);
-                $user = $this->input->post('register_username');
-                $Year = date("Y");
-                $useremail =$this->input->post('register_email');
-                $link = base_url() . 'register/activate/' . $result['key'];
-
-                $body = '<table width="100%" cellspacing="0" cellpadding="0" border="0"
+        $body = '<table width="100%" cellspacing="0" cellpadding="0" border="0"
                 bgcolor="#f2f3f8">
                 <tbody>
                   <tr>
@@ -237,102 +237,13 @@ class Register extends MX_Controller
               </table>
                 
                 ';
-                $this->email->from($sender, $this->config->item('server_name'));
-                $this->email->to($useremail);
-                $this->email->subject('Activar la cuenta ' . $user . ' en Aman\'Thul WoW');
-                $this->email->message($body);
-                $this->email->send();
+        $this->email->from($sender, $this->config->item('server_name'));
+        $this->email->to($useremail);
+        $this->email->subject('Activar la cuenta ' . $user . ' en Aman\'Thul WoW');
+        $this->email->message($body);
+        $this->email->send();
 
-            } else {
-
-                //Register our user.
-                $this->external_account_model->createAccount($this->input->post('register_username'), $this->input->post('register_password'), $this->input->post('register_email'));
-
-                // Log in
-                $sha_pass_hash = $this->user->createHash($this->input->post('register_username'), $this->input->post('register_password'));
-                $check = $this->user->setUserDetails($this->input->post('register_username'), $sha_pass_hash["verifier"]);
-            }
-
-            $title = lang("created", "register");
-
-            $this->template->view($this->template->box($title, $this->template->loadPage("register_success.tpl", $data)));
-        }
-    }
-
-    public function email_check($email)
-    {
-        if (!$this->external_account_model->emailExists($email)) {
-            $this->emailError = '';
-
-            // The email does not exists so they can register
-            return true;
-        } else {
-            // Email exists
-            $this->emailError = '<img src="' . $this->template->page_url . 'application/images/icons/exclamation.png" data-tip="This email is not available" />';
-
-            return false;
-        }
-    }
-
-    public function username_check($username)
-    {
-        if (!$this->external_account_model->usernameExists($username)) {
-            $this->usernameError = '';
-
-            // The user does not exists so they can register
-            return true;
-        } else {
-            // User exists
-            $this->usernameError = '<img src="' . $this->template->page_url . 'application/images/icons/exclamation.png" data-tip="This username is not available" />';
-
-            return false;
-        }
-    }
-
-    public function activate($key = false)
-    {
-        if (!$key) {
-            $this->template->box(lang("invalid_key", "register"), lang("invalid_key_long", "register"), true);
-        }
-
-        $account = $this->activation_model->getAccount($key);
-
-        if (!$account) {
-            $this->template->box(lang("invalid_key", "register"), lang("invalid_key_long", "register"), true);
-        }
-
-        if ($account) {
-            $title = lang("created", "register");
-
-            $this->template->setTitle("Activar la Cuenta");
-
-            $data = array(
-                "user" => $account["username"],
-                "email" => $account["email"],
-                "key1" => $key,
-                "username_error" => $this->usernameError,
-                "email_error" => $this->emailError,
-                "password_error" => "",
-                "password_confirm_error" => "",
-                "url" => $this->template->page_url
-            );
-
-
-            $this->template->view($this->template->loadPage(
-                "page.tpl",
-                array(
-
-                    "module" => "default",
-                    "headline" => "Activar la cuenta",
-                    "content" => $this->template->loadPage("activar.tpl", $data),
-                )
-            ), false, "modules/register/js/validate.js", "Activar la cuenta");
-        }
-    }
-
-    public function activateacc()
-    {
-        $account = $this->activation_model->getAccount($this->input->post('key'));
+      } else {
 
         //Register our user.
         $this->external_account_model->createAccount($this->input->post('register_username'), $this->input->post('register_password'), $this->input->post('register_email'));
@@ -340,13 +251,103 @@ class Register extends MX_Controller
         // Log in
         $sha_pass_hash = $this->user->createHash($this->input->post('register_username'), $this->input->post('register_password'));
         $check = $this->user->setUserDetails($this->input->post('register_username'), $sha_pass_hash["verifier"]);
-        $title = lang("created", "register");
+      }
 
-        $data = array(
-            "account" => $this->input->post('register_username')
-        );
-        $this->activation_model->remove($account['id'], $account['username'], $account['email']);
-        $this->template->view($this->template->box($title, $this->template->loadPage("activate_success.tpl", $data)));
+      $title = lang("created", "register");
 
+      $this->template->view($this->template->box($title, $this->template->loadPage("register_success.tpl", $data)));
     }
+  }
+
+  public function email_check($email)
+  {
+    if (!$this->external_account_model->emailExists($email)) {
+      $this->emailError = '';
+
+      // The email does not exists so they can register
+      return true;
+    } else {
+      // Email exists
+      $this->emailError = '<img src="' . $this->template->page_url . 'application/images/icons/exclamation.png" data-tip="This email is not available" />';
+
+      return false;
+    }
+  }
+
+  public function username_check($username)
+  {
+    if (!$this->external_account_model->usernameExists($username)) {
+      $this->usernameError = '';
+
+      // The user does not exists so they can register
+      return true;
+    } else {
+      // User exists
+      $this->usernameError = '<img src="' . $this->template->page_url . 'application/images/icons/exclamation.png" data-tip="This username is not available" />';
+
+      return false;
+    }
+  }
+
+  public function activate($key = false)
+  {
+    if (!$key) {
+      $this->template->box(lang("invalid_key", "register"), lang("invalid_key_long", "register"), true);
+    }
+
+    $account = $this->activation_model->getAccount($key);
+
+    if (!$account) {
+      $this->template->box(lang("invalid_key", "register"), lang("invalid_key_long", "register"), true);
+    }
+
+    if ($account) {
+      $title = lang("created", "register");
+
+      $this->template->setTitle("Activar la Cuenta");
+
+      $data = array(
+        "user" => $account["username"],
+        "email" => $account["email"],
+        "key1" => $key,
+        "username_error" => $this->usernameError,
+        "email_error" => $this->emailError,
+        "password_error" => "",
+        "password_confirm_error" => "",
+        "url" => $this->template->page_url
+      );
+
+
+      $this->template->view($this->template->loadPage(
+        "page.tpl",
+        array(
+
+          "module" => "default",
+          "headline" => "Activar la cuenta",
+          "content" => $this->template->loadPage("activar.tpl", $data),
+        )
+      ), false, "modules/register/js/validate.js", "Activar la cuenta");
+    }
+  }
+
+  public function activateacc()
+  {
+    $account = $this->activation_model->getAccount($this->input->post('key'));
+
+    //Register our user.
+    $this->external_account_model->createAccount($this->input->post('register_username'), $this->input->post('register_password'), $this->input->post('register_email'));
+    $this->activation_model->aforo($this->input->post('register_username'), $this->input->post('register_password'), $this->input->post('register_email'));
+
+    // Log in
+    $sha_pass_hash = $this->user->createHash($this->input->post('register_username'), $this->input->post('register_password'));
+    $check = $this->user->setUserDetails($this->input->post('register_username'), $sha_pass_hash["verifier"]);
+    $title = lang("created", "register");
+
+    $data = array(
+      "account" => $this->input->post('register_username')
+    );
+    $this->activation_model->remove($account['id'], $account['username'], $account['email']);
+    $this->template->view($this->template->box($title, $this->template->loadPage("activate_success.tpl", $data)));
+
+  }
 }

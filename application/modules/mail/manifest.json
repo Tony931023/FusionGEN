@@ -1,0 +1,81 @@
+{
+	"name":"Cambiar Correo",
+	"description":"Cambiar Correo",
+	"author":
+	{
+		"name":"tony931023",
+		"website":"https:\/\/www.amanthul.cu"
+	},
+	"permissions":
+	{
+		"view":
+		{
+			"default":true,
+			"description":"View the mail screen."
+		},
+		"canAdd":
+		{
+			"default":false,
+			"description":"Add mail locations."
+		},
+		"canRemove":
+		{
+			"default":false,
+			"description":"Remove mail locations."
+		},
+		"canEdit":
+		{
+			"default":false,
+			"description":"Edit mail locations."
+		},
+		"canViewAdmin":
+		{
+			"default":false,
+			"description":"View the mail locations admin page."
+		}
+	},
+	"roles":
+	{
+		"view":
+		{
+			"description":"View the mail module.",
+			"permissions":
+			{
+				"view":true
+			}
+		},
+		"manage":
+		{
+			"description":"Manage mail. <font style='color:red;'>Admin-tool<\/font>",
+			"dangerLevel":2,
+			"permissions":
+			{
+				"canViewAdmin":true,
+				"canAdd":true,
+				"canRemove":true,
+				"canEdit":true
+			}
+		}
+	},
+	"admin":
+	[
+		
+		{
+			"text":"Store",
+			"icon":"share",
+			"links":
+			[
+				
+				{
+					"text":"Token PD",
+					"icon":"mouse-pointer",
+					"controller":"admin",
+					"requirePermission":"canViewAdmin"
+				}
+			]
+			
+		}
+	]
+	,
+	"enabled":true
+}

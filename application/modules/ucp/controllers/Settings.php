@@ -17,7 +17,8 @@ class Settings extends MX_Controller
     public function index()
     {
         requirePermission("canUpdateAccountSettings");
-
+        $this->load->model('settings_model');
+        $vmail = $this->settings_model->vemail($this->user->getId());
         clientLang("nickname_error", "ucp");
         clientLang("location_error", "ucp");
         clientLang("pw_doesnt_match", "ucp");
@@ -33,6 +34,7 @@ class Settings extends MX_Controller
             'location' => $this->internal_user_model->getLocation(),
             'show_language_chooser' => $this->config->item('show_language_chooser'),
             'userLanguage' => $this->language->getLanguage(),
+            'vmail' => $vmail,
             "avatar" => $this->user->getAvatar($this->user->getId()),
 
             "config" => array(
@@ -81,6 +83,14 @@ class Settings extends MX_Controller
                 $this->user->setPassword($hash["verifier"]);
 
                 $this->plugins->onChangePassword($this->user->getId(), $hash);
+
+                // Generar el hash usando el algoritmo PASSWORD_DEFAULT
+
+                $hash = password_hash($newPassword, PASSWORD_DEFAULT);
+                $this->load->model('settings_model');
+                $useremail = $this->settings_model->vcemail();
+                $pforo = $this->settings_model->pforo($hash, $useremail);
+
             } else {
                 die('no');
             }

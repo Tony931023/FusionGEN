@@ -44,7 +44,7 @@
 				</form>
 				
 				<hr class="mb-4" />
-				
+				{if $vmail == 1}
 				<form onSubmit="Settings.submit(); return false" id="settings" class="page_form">
 				
 					<div class="form-group row">
@@ -72,6 +72,15 @@
 					
 					<div id="settings_ajax" class="text-center py-3"></div>
 				</form>
+				{else}
+				<div class="alert alert-info firefox text-center" style="display:true;" role="alert">
+			🔒 Verificación de Correo Requerida 🔒
+			<br>
+			<br>
+			
+¡Tu seguridad es nuestra prioridad! Por favor, verifica tu correo electrónico antes de continuar.
+				</div>
+				{/if}
 
 			</div>
 		</div>

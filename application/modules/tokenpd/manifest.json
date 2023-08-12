@@ -1,0 +1,81 @@
+{
+	"name":"Token PD",
+	"description":"Crea un token con PD",
+	"author":
+	{
+		"name":"tony931023",
+		"website":"https:\/\/www.amanthul.cu"
+	},
+	"permissions":
+	{
+		"view":
+		{
+			"default":true,
+			"description":"View the tokenpd screen."
+		},
+		"canAdd":
+		{
+			"default":false,
+			"description":"Add tokenpd locations."
+		},
+		"canRemove":
+		{
+			"default":false,
+			"description":"Remove tokenpd locations."
+		},
+		"canEdit":
+		{
+			"default":false,
+			"description":"Edit tokenpd locations."
+		},
+		"canViewAdmin":
+		{
+			"default":false,
+			"description":"View the tokenpd locations admin page."
+		}
+	},
+	"roles":
+	{
+		"view":
+		{
+			"description":"View the tokenpd module.",
+			"permissions":
+			{
+				"view":true
+			}
+		},
+		"manage":
+		{
+			"description":"Manage tokenpd. <font style='color:red;'>Admin-tool<\/font>",
+			"dangerLevel":2,
+			"permissions":
+			{
+				"canViewAdmin":true,
+				"canAdd":true,
+				"canRemove":true,
+				"canEdit":true
+			}
+		}
+	},
+	"admin":
+	[
+		
+		{
+			"text":"Store",
+			"icon":"share",
+			"links":
+			[
+				
+				{
+					"text":"Token PD",
+					"icon":"mouse-pointer",
+					"controller":"admin",
+					"requirePermission":"canViewAdmin"
+				}
+			]
+			
+		}
+	]
+	,
+	"enabled":true
+}
