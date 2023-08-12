@@ -1,0 +1,81 @@
+{
+	"name":"Migrate",
+	"description":"Permite migrar un PJ",
+	"author":
+	{
+		"name":"tony931023",
+		"website":"https:\/\/www.amanthul.cu"
+	},
+	"permissions":
+	{
+		"view":
+		{
+			"default":true,
+			"description":"View the migrate screen."
+		},
+		"canAdd":
+		{
+			"default":false,
+			"description":"Add migrate locations."
+		},
+		"canRemove":
+		{
+			"default":false,
+			"description":"Remove migrate locations."
+		},
+		"canEdit":
+		{
+			"default":false,
+			"description":"Edit migrate locations."
+		},
+		"canViewAdmin":
+		{
+			"default":false,
+			"description":"View the migrate locations admin page."
+		}
+	},
+	"roles":
+	{
+		"view":
+		{
+			"description":"View the migrate module.",
+			"permissions":
+			{
+				"view":true
+			}
+		},
+		"manage":
+		{
+			"description":"Manage migrate. <font style='color:red;'>Admin-tool<\/font>",
+			"dangerLevel":2,
+			"permissions":
+			{
+				"canViewAdmin":true,
+				"canAdd":true,
+				"canRemove":true,
+				"canEdit":true
+			}
+		}
+	},
+	"admin":
+	[
+		
+		{
+			"text":"Migrate",
+			"icon":"share",
+			"links":
+			[
+				
+				{
+					"text":"Migrate",
+					"icon":"mouse-pointer",
+					"controller":"admin",
+					"requirePermission":"canViewAdmin"
+				}
+			]
+			
+		}
+	]
+	,
+	"enabled":true
+}
